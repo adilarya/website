@@ -36,6 +36,71 @@
   }
 }
 
+@layer components {
+  /* ---------------------------------------------------------------
+     Hardened button base — guarantees alignment, solid hit target,
+     and consistent rendering across Chrome profiles, Edge, Firefox,
+     and environments where extensions disable compositing/blur.
+     Avoids reliance on backdrop-filter and very-low-opacity bg.
+  --------------------------------------------------------------- */
+  .btn-base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease,
+                background-color 0.2s ease, border-color 0.2s ease,
+                color 0.2s ease;
+    will-change: transform;
+  }
+
+  /* Primary — solid gradient, opaque, no blur dependency */
+  .btn-primary {
+    background-image: linear-gradient(to right, #6366f1, #06b6d4);
+    background-color: #4f46e5; /* fallback if gradient fails */
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .btn-primary:hover {
+    box-shadow: 0 6px 22px rgba(99, 102, 241, 0.55);
+  }
+
+  /* Secondary — fully opaque dark surface, visible without compositing */
+  .btn-secondary {
+    background-color: #18181f;     /* solid, ~zinc-900 tone */
+    color: #e5e7eb;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+  .btn-secondary:hover {
+    background-color: #22222d;
+    border-color: rgba(129, 140, 248, 0.55);
+    color: #ffffff;
+  }
+
+  /* Ghost — used for nav/footer icon buttons. Solid hover, no blur. */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: #9ca3af;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .btn-ghost:hover {
+    background-color: #1f1f2a; /* solid, replaces bg-white/5 */
+    color: #ffffff;
+  }
+}
+
 @layer utilities {
   .text-gradient {
     background: linear-gradient(135deg, #818cf8 0%, #22d3ee 100%);

@@ -45,7 +45,7 @@ export default function Navbar() {
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? 'bg-[#09090f]/90 backdrop-blur-xl border-b border-white/5'
+            ? 'bg-[#0a0a12] supports-[backdrop-filter]:bg-[#09090f]/85 supports-[backdrop-filter]:backdrop-blur-xl border-b border-white/10'
             : 'bg-transparent'
         }`}
       >
@@ -90,14 +90,14 @@ export default function Navbar() {
               href="mailto:adil.arya.biz@gmail.com"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 transition-all duration-200 whitespace-nowrap"
+              className="btn-base btn-primary hidden md:inline-flex items-center justify-center px-4 py-2 text-sm whitespace-nowrap"
             >
               Get in touch
             </motion.a>
 
             <button
               onClick={() => setMenuOpen(prev => !prev)}
-              className="md:hidden p-2 rounded-lg text-gray-400 hover:text-white transition-colors"
+              className="btn-ghost md:hidden p-2 rounded-lg"
               aria-label="Toggle menu"
             >
               {menuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -122,14 +122,14 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
-                  className="px-4 py-3 rounded-lg text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
+                  className="inline-flex items-center px-4 py-3 rounded-lg text-sm font-medium text-gray-300 hover:bg-[#1f1f2a] hover:text-white transition-colors"
                 >
                   {link.label}
                 </a>
               ))}
               <a
                 href="mailto:adil.arya.biz@gmail.com"
-                className="mt-2 px-4 py-3 rounded-lg text-sm font-medium text-center bg-gradient-to-r from-indigo-500 to-cyan-500 text-white"
+                className="btn-base btn-primary mt-2 inline-flex items-center justify-center px-4 py-3 text-sm"
               >
                 Get in touch
               </a>

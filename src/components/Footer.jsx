@@ -51,7 +51,7 @@ export default function Footer() {
                   target={href.startsWith('mailto') ? undefined : '_blank'}
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.1, y: -1 }}
-                  className="p-1.5 rounded-lg transition-colors text-gray-700 hover:text-gray-300 hover:bg-white/5"
+                  className="btn-ghost p-1.5 rounded-lg"
                 >
                   <Icon size={14} />
                 </motion.a>
