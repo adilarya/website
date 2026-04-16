@@ -111,8 +111,8 @@ export default function About() {
                     // Unified hover transition — consistent with the rest of the site
                     style={{ transition: 'border-color 0.25s, background 0.25s, transform 0.25s' }}
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border cursor-default
-                               bg-white/[0.03] border-white/10 text-gray-300
-                               hover:border-indigo-500/40 hover:bg-indigo-500/10 hover:text-gray-100"
+                               bg-white/[0.06] border-hairline text-gray-300
+                               hover:border-indigo-500/40 hover:bg-indigo-500/15 hover:text-gray-100"
                   >
                     <span>{item.icon}</span>
                     {item.label}
@@ -134,9 +134,7 @@ export default function About() {
                   whileHover={{ y: -3, scale: 1.02 }}
                   // All hover transitions use the same 250 ms easing
                   style={{ transition: 'border-color 0.25s, background 0.25s, box-shadow 0.25s' }}
-                  className="p-6 rounded-2xl border cursor-default
-                             bg-white/[0.03] border-white/8
-                             hover:border-indigo-500/30 hover:bg-indigo-500/5
+                  className="surface-card p-6 rounded-2xl cursor-default
                              hover:shadow-[0_4px_24px_rgba(99,102,241,0.12)]"
                 >
                   <div className="text-3xl font-black text-gradient mb-1">
@@ -157,7 +155,7 @@ export default function About() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.6 }}
-              className="mt-4 p-5 rounded-2xl border bg-gradient-to-br from-indigo-900/20 to-cyan-900/10 border-indigo-500/20"
+              className="tinted-indigo mt-4 p-5 rounded-2xl"
             >
               <p className="text-xs font-semibold uppercase tracking-widest mb-3 text-indigo-400">
                 Key Coursework

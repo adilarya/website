@@ -79,13 +79,13 @@ export default function Contact() {
 
             <motion.a
               href="mailto:adil.arya.biz@gmail.com"
-              whileHover={{ scale: 1.03 }}
+              whileHover={{ scale: 1.03, boxShadow: '0 0 40px rgba(129,140,248,0.4)' }}
               whileTap={{ scale: 0.97 }}
-              className="btn-base btn-primary inline-flex items-center justify-center px-8 py-4 text-sm"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 text-white text-sm font-semibold shadow-lg shadow-indigo-500/25 transition-all duration-200"
             >
               <Mail size={16} />
               Send me an email
-              <ArrowUpRight size={14} className="opacity-80" />
+              <ArrowUpRight size={14} className="opacity-70" />
             </motion.a>
 
             <p className="mt-4 text-xs text-gray-700">
@@ -130,7 +130,7 @@ export default function Contact() {
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : {}}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="p-4 rounded-xl border text-xs text-center border-white/5 text-gray-700"
+              className="p-4 rounded-xl border text-xs text-center bg-[#14142a] border-hairline text-gray-500"
             >
               📍 Based in Minneapolis · Moving to New York, Fall 2026
             </motion.div>

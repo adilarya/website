@@ -146,7 +146,7 @@ export default function Experience() {
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
                   transition={{ duration: 0.5, delay: 0.1 + i * 0.15 }}
                   whileHover={{ x: 4 }}
-                  className="relative p-5 rounded-2xl border transition-all duration-300 bg-white/[0.03] border-white/8 hover:border-indigo-500/30"
+                  className="relative p-5 rounded-2xl border transition-all duration-300 bg-[#14142a] border border-hairline hover:border-indigo-500/30"
                 >
                   {exp.current && (
                     <div className="absolute top-4 right-4 flex items-center gap-1.5 text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
@@ -182,7 +182,7 @@ export default function Experience() {
           </div>
 
           {/* Divider */}
-          <div className="hidden lg:block bg-white/6" />
+          <div className="hidden lg:block bg-white/15" />
 
           {/* ─ Education ─ */}
           <div className="lg:pl-12">
@@ -207,7 +207,7 @@ export default function Experience() {
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
                   transition={{ duration: 0.5, delay: 0.2 + i * 0.15 }}
                   whileHover={{ x: -4 }}
-                  className="p-5 rounded-2xl border transition-all duration-300 bg-white/[0.03] border-white/8 hover:border-indigo-500/30"
+                  className="p-5 rounded-2xl border transition-all duration-300 bg-[#14142a] border border-hairline hover:border-indigo-500/30"
                 >
                   <div className="flex items-start gap-4 mb-3">
                     <LogoBadge {...edu} />
@@ -241,7 +241,7 @@ export default function Experience() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.5 }}
-                className="p-5 rounded-2xl border bg-gradient-to-br from-indigo-900/20 to-cyan-900/10 border-indigo-500/20"
+                className="tinted-indigo p-5 rounded-2xl"
               >
                 <p className="text-xs font-semibold uppercase tracking-widest mb-3 text-indigo-400">
                   Campus Leadership

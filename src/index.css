@@ -2,121 +2,145 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   BROWSER HARDENING LAYER
+   These rules establish a solid baseline that survives extension-injected
+   CSS, partial feature support, forced colors, and reduced-motion settings.
+   Principle: define solid fallbacks first, layer enhancements on top.
+   ───────────────────────────────────────────────────────────────────────── */
+
 @layer base {
+  /* Universal box-sizing covering pseudo-elements (some injected sheets reset). */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
   html {
     scroll-behavior: smooth;
+    background-color: #09090f;
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   body {
-    font-family: 'Inter', system-ui, sans-serif;
+    background-color: #09090f;
+    color: #e5e7eb;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
+    overflow-x: hidden;
   }
 
-  ::selection {
-    background: rgba(129, 140, 248, 0.3);
-    color: #e0e7ff;
+  #root {
+    min-height: 100vh;
+    background-color: #09090f;
+    isolation: isolate; /* Fresh stacking context, blocks z-index attacks from extensions. */
   }
 
-  ::-webkit-scrollbar {
-    width: 6px;
+  img, svg, video {
+    max-width: 100%;
+    height: auto;
+    display: block;
   }
 
-  ::-webkit-scrollbar-track {
-    background: #09090f;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: rgba(129, 140, 248, 0.4);
-    border-radius: 3px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(129, 140, 248, 0.7);
-  }
-}
-
-@layer components {
-  /* ---------------------------------------------------------------
-     Hardened button base — guarantees alignment, solid hit target,
-     and consistent rendering across Chrome profiles, Edge, Firefox,
-     and environments where extensions disable compositing/blur.
-     Avoids reliance on backdrop-filter and very-low-opacity bg.
-  --------------------------------------------------------------- */
-  .btn-base {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    border-radius: 0.75rem;
-    font-weight: 600;
-    line-height: 1;
-    white-space: nowrap;
+  /* Normalize buttons so a fresh-profile UA stylesheet doesn't reintroduce
+     grey rounded backgrounds on our gradient CTAs. */
+  button {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    font: inherit;
     cursor: pointer;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    transition: transform 0.2s ease, box-shadow 0.2s ease,
-                background-color 0.2s ease, border-color 0.2s ease,
-                color 0.2s ease;
-    will-change: transform;
   }
 
-  /* Primary — solid gradient, opaque, no blur dependency */
-  .btn-primary {
-    background-image: linear-gradient(to right, #6366f1, #06b6d4);
-    background-color: #4f46e5; /* fallback if gradient fails */
-    color: #ffffff;
-    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-  .btn-primary:hover {
-    box-shadow: 0 6px 22px rgba(99, 102, 241, 0.55);
+  a { color: inherit; text-decoration: none; }
+
+  ::selection { background: rgba(129, 140, 248, 0.3); color: #e0e7ff; }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #09090f; }
+  ::-webkit-scrollbar-thumb { background: rgba(129, 140, 248, 0.4); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(129, 140, 248, 0.7); }
+
+  /* ── Reduced motion ──
+     Also rescues users whose Framer Motion animations are throttled by
+     extensions: the timeline bar fill is forced to its final state so it
+     never appears collapsed. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    .timeline-bar-fill {
+      transform: none !important;
+      opacity: 1 !important;
+    }
   }
 
-  /* Secondary — fully opaque dark surface, visible without compositing */
-  .btn-secondary {
-    background-color: #18181f;     /* solid, ~zinc-900 tone */
-    color: #e5e7eb;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-  }
-  .btn-secondary:hover {
-    background-color: #22222d;
-    border-color: rgba(129, 140, 248, 0.55);
-    color: #ffffff;
-  }
-
-  /* Ghost — used for nav/footer icon buttons. Solid hover, no blur. */
-  .btn-ghost {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: transparent;
-    color: #9ca3af;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  }
-  .btn-ghost:hover {
-    background-color: #1f1f2a; /* solid, replaces bg-white/5 */
-    color: #ffffff;
+  /* ── Forced colors (Windows High Contrast / similar) ──
+     Strip decoration so the OS can paint readable surfaces, but keep
+     timeline bars visible by mapping them to Highlight. */
+  @media (forced-colors: active) {
+    .text-gradient,
+    .text-gradient-soft {
+      background: none !important;
+      -webkit-text-fill-color: CanvasText !important;
+      color: CanvasText !important;
+    }
+    .glass,
+    .surface-card,
+    .surface-card-strong,
+    .tinted-indigo,
+    .tinted-violet {
+      background: Canvas !important;
+      border: 1px solid CanvasText !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+    .timeline-bar-fill {
+      background: Highlight !important;
+      forced-color-adjust: none;
+    }
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   UTILITIES — robust building blocks
+   ───────────────────────────────────────────────────────────────────────── */
 
 @layer utilities {
+
+  /* Gradient text with always-visible fallback color. The transparent
+     fill is only applied via @supports so that if clipping fails the
+     accent color remains readable. */
   .text-gradient {
-    background: linear-gradient(135deg, #818cf8 0%, #22d3ee 100%);
+    color: #a5b4fc;
+    background-image: linear-gradient(135deg, #818cf8 0%, #22d3ee 100%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .text-gradient { -webkit-text-fill-color: transparent; }
   }
 
   .text-gradient-soft {
-    background: linear-gradient(135deg, #a5b4fc 0%, #67e8f9 100%);
+    color: #c7d2fe;
+    background-image: linear-gradient(135deg, #a5b4fc 0%, #67e8f9 100%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .text-gradient-soft { -webkit-text-fill-color: transparent; }
   }
 
   .border-gradient {
+    border: 1px solid rgba(129, 140, 248, 0.4);
     border-image: linear-gradient(135deg, #818cf8, #22d3ee) 1;
   }
 
@@ -124,12 +148,10 @@
     box-shadow: 0 0 30px rgba(129, 140, 248, 0.25),
                 0 0 60px rgba(129, 140, 248, 0.1);
   }
-
   .glow-cyan {
     box-shadow: 0 0 30px rgba(34, 211, 238, 0.25),
                 0 0 60px rgba(34, 211, 238, 0.1);
   }
-
   .glow-avatar {
     box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.5),
                 0 0 40px rgba(129, 140, 248, 0.3),
@@ -137,51 +159,104 @@
   }
 
   .section-divider {
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
+  /* Glass surface — solid base, blur only as enhancement. Never relies
+     on backdrop-filter for visibility. */
   .glass {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: rgba(20, 20, 32, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  @supports ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
+    .glass {
+      background-color: rgba(20, 20, 32, 0.55);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
   }
 
-  .glass-hover {
-    transition: all 0.3s ease;
+  /* Workhorse card surface — replaces fragile bg-white/[0.03]. */
+  .surface-card {
+    background-color: #14142a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+  }
+  .surface-card:hover {
+    background-color: #181834;
+    border-color: rgba(129, 140, 248, 0.35);
   }
 
+  .surface-card-strong {
+    background-color: #16162e;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .glass-hover { transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease; }
   .glass-hover:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background-color: rgba(255, 255, 255, 0.06);
     border-color: rgba(129, 140, 248, 0.3);
     transform: translateY(-2px);
   }
 
-  /* Noise texture overlay */
-  .noise-overlay::before {
-    content: '';
+  /* Helps any flex/grid child opt into safe shrinking — prevents
+     min-width:auto from clipping ellipsised text or expanding bars. */
+  .min-w-safe { min-width: 0; }
+  .min-h-safe { min-height: 0; }
+
+  /* Timeline bar fill — solid fallback color (never relies on gradient).
+     Min-width guarantees the bar is always visibly drawn even on
+     extremely short date ranges. transform-origin pinned so any extension
+     resetting transforms can't make scaleX shrink from the center. */
+  .timeline-bar-fill {
     position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 0.5rem;
+    background-color: #6366f1;
+    transform-origin: left center;
+    min-width: 6px;
+    will-change: transform;
   }
-
-  /* Timeline specific */
-  .timeline-bar {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-  }
-
-  .timeline-bar:hover {
-    filter: brightness(1.2);
+  .timeline-bar-fill:hover {
     box-shadow: 0 4px 20px rgba(129, 140, 248, 0.3);
   }
 
-  /* Animated gradient border */
+  /* Replacements for the broken `border-white/8` class
+     (Tailwind has no /8 opacity step, so it silently produced no border). */
+  .border-hairline { border-color: rgba(255, 255, 255, 0.1); }
+  .border-hairline-strong { border-color: rgba(255, 255, 255, 0.16); }
+
+  /* Tinted callout cards with solid fallback color underneath the gradient. */
+  .tinted-indigo {
+    background-color: #1a1a3a;
+    background-image: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(34, 211, 238, 0.08));
+    border: 1px solid rgba(129, 140, 248, 0.25);
+  }
+  .tinted-violet {
+    background-color: #221b3a;
+    background-image: linear-gradient(135deg, rgba(139, 92, 246, 0.18), rgba(99, 102, 241, 0.08));
+    border: 1px solid rgba(167, 139, 250, 0.25);
+  }
+
   .gradient-border {
     position: relative;
-    background: linear-gradient(#12121e, #12121e) padding-box,
-                linear-gradient(135deg, #818cf8, #22d3ee) border-box;
-    border: 1px solid transparent;
+    background-color: #12121e;
+    border: 1px solid rgba(129, 140, 248, 0.4);
+  }
+  @supports (background-origin: border-box) {
+    .gradient-border {
+      background:
+        linear-gradient(#12121e, #12121e) padding-box,
+        linear-gradient(135deg, #818cf8, #22d3ee) border-box;
+      border: 1px solid transparent;
+    }
+  }
+
+  .focus-visible-ring:focus-visible {
+    outline: 2px solid #818cf8;
+    outline-offset: 2px;
   }
 }

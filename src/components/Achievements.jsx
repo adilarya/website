@@ -163,7 +163,7 @@ export default function Achievements() {
                 animate={isInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.5, delay: i * 0.12 }}
                 whileHover={{ x: 4 }}
-                className="flex gap-5 p-5 rounded-2xl border transition-all duration-300 bg-white/[0.03] border-white/8 hover:border-amber-500/25"
+                className="flex gap-5 p-5 rounded-2xl border transition-all duration-300 bg-[#14142a] border-hairline hover:border-amber-500/25"
               >
                 {/* Logo tile — fully fills the 56×56 box */}
                 <LogoTile
@@ -250,7 +250,7 @@ export default function Achievements() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.55 }}
-              className="mt-6 p-5 rounded-2xl border bg-gradient-to-br from-violet-900/20 to-indigo-900/10 border-violet-500/20"
+              className="mt-6 p-5 rounded-2xl tinted-violet"
             >
               <p className="text-xs font-semibold uppercase tracking-widest mb-2 text-violet-400">
                 Beyond the Resume

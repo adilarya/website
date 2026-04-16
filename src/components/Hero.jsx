@@ -82,16 +82,12 @@ const Avatar = () => (
         <div className="absolute inset-0 rounded-full bg-gradient-to-t from-indigo-950/35 via-transparent to-indigo-900/10 pointer-events-none" />
       </motion.div>
 
-      {/* Floating badges — solid backgrounds (no backdrop-blur) so they
-          render identically across Chrome profiles and extensions that
-          disable compositing. Tinted dark surfaces preserve the original
-          muted-on-dark aesthetic. */}
+      {/* Floating badges */}
       <motion.div
         animate={{ y: [0, -6, 0] }}
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
         className="absolute -top-4 -right-6 px-3 py-1.5 rounded-full text-xs font-semibold border
-                   border-indigo-500/50 text-indigo-300 whitespace-nowrap shadow-md"
-        style={{ backgroundColor: '#1e1b4b' }}
+                   backdrop-blur-sm bg-indigo-500/35 border-indigo-500/50 text-indigo-300 whitespace-nowrap"
       >
         GPA 3.903
       </motion.div>
@@ -100,8 +96,7 @@ const Avatar = () => (
         animate={{ y: [0, 6, 0] }}
         transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
         className="absolute -bottom-2 -left-8 px-3 py-1.5 rounded-full text-xs font-semibold border
-                   border-cyan-500/50 text-cyan-300 whitespace-nowrap shadow-md"
-        style={{ backgroundColor: '#0c2a33' }}
+                   backdrop-blur-sm bg-cyan-500/35 border-cyan-500/50 text-cyan-300 whitespace-nowrap"
       >
         Columbia '28 →
       </motion.div>
@@ -110,8 +105,7 @@ const Avatar = () => (
         animate={{ y: [0, -4, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
         className="absolute bottom-8 -right-10 px-3 py-1.5 rounded-full text-xs font-semibold border
-                   border-violet-500/50 text-violet-300 whitespace-nowrap shadow-md"
-        style={{ backgroundColor: '#2a1858' }}
+                   backdrop-blur-sm bg-violet-500/35 border-violet-500/50 text-violet-300 whitespace-nowrap"
       >
         AI / CV / NLP
       </motion.div>
@@ -192,10 +186,10 @@ export default function Hero() {
             <motion.div {...fadeUp(0.5)} className="flex flex-wrap items-center gap-3 pt-2">
               <motion.a
                 href="#contact"
-                whileHover={{ scale: 1.03 }}
+                whileHover={{ scale: 1.03, boxShadow: '0 0 30px rgba(129,140,248,0.4)' }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="btn-base btn-primary inline-flex items-center justify-center px-6 py-3 text-sm"
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 text-white text-sm font-semibold shadow-lg shadow-indigo-500/25 transition-shadow duration-200"
               >
                 Contact Me
               </motion.a>
@@ -204,10 +198,10 @@ export default function Hero() {
                 href="/resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.03 }}
+                whileHover={{ scale: 1.03, boxShadow: '0 0 20px rgba(255,255,255,0.06)' }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="btn-base btn-secondary inline-flex items-center justify-center px-6 py-3 text-sm"
+                className="px-6 py-3 rounded-xl text-sm font-semibold border flex items-center gap-2 transition-all duration-200 border-white/15 text-gray-300 hover:border-indigo-500/50 hover:text-white hover:bg-white/5"
               >
                 View Resume
                 <ExternalLink size={13} />

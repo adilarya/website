@@ -264,26 +264,38 @@ function TooltipContent({ tooltip }) {
 }
 
 // ─── Individual bar ───────────────────────────────────────────────────────────
-// Logo is flex-shrink-0 so it always renders when the bar has any width.
-// Org text truncates naturally via text-ellipsis — no layout shift on hover.
+// Hardening notes:
+//  • Uses width-based animation (not scaleX) so a transform-blocking
+//    extension or partial Framer Motion failure can never leave the bar
+//    at width 0. Final width is set inline as a hard guarantee.
+//  • Solid background-color fallback before the gradient class so the bar
+//    is always visible even if Tailwind's bg-gradient-to-r is overridden.
+//  • min-width:6px ensures even ultra-short ranges render visibly.
 function TimelineBar({ item, isVisible, onHover, onLeave }) {
   const left  = toPercent(item.start)
   const width = toPercent(item.end) - toPercent(item.start)
+  const finalWidthPct = Math.max(width, 1.5)
+
+  // Map color gradient to a solid fallback color (extracted from the
+  // glow rgba) so the bar fill is visible without gradient support.
+  const solidFallback = item.glow.replace(/rgba\(([^)]+),\s*[\d.]+\)/, 'rgb($1)')
 
   return (
     <div style={{ position: 'relative', height: '36px', overflow: 'visible' }}>
       <motion.div
-        initial={{ scaleX: 0, opacity: 0 }}
-        animate={isVisible ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
-        transition={{ duration: 0.65, delay: 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
+        initial={{ opacity: 0, y: 4 }}
+        animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 4 }}
+        transition={{ duration: 0.5, delay: 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
         style={{
           position: 'absolute',
           top: 0,
           bottom: 0,
           left: `${left}%`,
-          width: `${Math.max(width, 1.5)}%`,
-          originX: 0,
+          width: `${finalWidthPct}%`,
+          minWidth: '6px',
+          backgroundColor: solidFallback,
           zIndex: 1,
+          borderRadius: '0.5rem',
         }}
         whileHover={{
           boxShadow: `0 2px 24px ${item.glow}, 0 0 48px ${item.glow.replace(/[\d.]+\)$/, '0.2)')}`,
@@ -293,10 +305,9 @@ function TimelineBar({ item, isVisible, onHover, onLeave }) {
         onMouseEnter={(e) => onHover(item, e.clientX, e.clientY)}
         onMouseMove={(e)  => onHover(item, e.clientX, e.clientY)}
         onMouseLeave={onLeave}
-        className={`rounded-lg bg-gradient-to-r ${item.color} cursor-pointer select-none`}
+        className={`timeline-bar-fill bg-gradient-to-r ${item.color} cursor-pointer select-none`}
       >
-        <div className="absolute inset-0 flex items-center px-2 gap-1.5 overflow-hidden rounded-lg">
-          {/* Small logo — flex-shrink-0 keeps it visible even on narrow bars */}
+        <div className="absolute inset-0 flex items-center px-2 gap-1.5 overflow-hidden rounded-lg min-w-safe">
           {item.logo && (
             <img
               src={item.logo}
@@ -304,9 +315,10 @@ function TimelineBar({ item, isVisible, onHover, onLeave }) {
               aria-hidden="true"
               className="flex-shrink-0 w-[15px] h-[15px] rounded-sm object-contain opacity-75"
               style={{ background: 'rgba(255,255,255,0.15)' }}
+              onError={(e) => { e.currentTarget.style.display = 'none' }}
             />
           )}
-          <span className="text-white text-[10px] font-semibold whitespace-nowrap overflow-hidden text-ellipsis leading-none flex-1 min-w-0">
+          <span className="text-white text-[10px] font-semibold whitespace-nowrap overflow-hidden text-ellipsis leading-none flex-1 min-w-safe">
             {item.org}
           </span>
           {item.ongoing && (
@@ -370,11 +382,11 @@ export default function Timeline() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="rounded-2xl border border-white/8 bg-[#0f0f1e]"
+          className="rounded-2xl border border-hairline bg-[#0f0f1e]"
         >
           {/* Year header — overflow:hidden only here for rounded corners */}
-          <div className="flex border-b border-white/8 rounded-t-2xl overflow-hidden">
-            <div className="flex-shrink-0 w-36 sm:w-44 border-r border-white/8 px-4 py-3 flex items-center">
+          <div className="flex border-b border-hairline rounded-t-2xl overflow-hidden">
+            <div className="flex-shrink-0 w-36 sm:w-44 border-r border-hairline px-4 py-3 flex items-center">
               <span className="text-xs font-semibold text-gray-600">Lane</span>
             </div>
             <div className="flex-1 relative py-3 px-2">
@@ -392,7 +404,7 @@ export default function Timeline() {
               {YEAR_MARKERS.map(({ year, date }) => (
                 <div
                   key={year}
-                  className="absolute top-0 bottom-0 w-px bg-white/5"
+                  className="absolute top-0 bottom-0 w-px bg-white/10"
                   style={{ left: `${toPercent(date)}%` }}
                 />
               ))}
@@ -403,19 +415,19 @@ export default function Timeline() {
           {LANES.map((lane, laneIdx) => (
             <div
               key={lane.id}
-              className={laneIdx < LANES.length - 1 ? 'flex border-b border-white/5' : 'flex'}
+              className={laneIdx < LANES.length - 1 ? 'flex border-b border-hairline' : 'flex'}
             >
-              <div className="flex-shrink-0 w-36 sm:w-44 border-r border-white/5 px-4 py-4 flex items-center gap-2">
+              <div className="flex-shrink-0 w-36 sm:w-44 border-r border-hairline px-4 py-4 flex items-center gap-2">
                 <span className="text-base leading-none">{lane.icon}</span>
                 <span className="text-xs font-bold tracking-wide text-gray-300">{lane.label}</span>
               </div>
 
               {/* overflow:visible — bars must not be clipped on hover */}
-              <div className="flex-1 relative py-3 px-2 space-y-2" style={{ overflow: 'visible' }}>
+              <div className="flex-1 relative py-3 px-2 space-y-2 min-w-safe" style={{ overflow: 'visible' }}>
                 {YEAR_MARKERS.map(({ year, date }) => (
                   <div
                     key={year}
-                    className="absolute top-0 bottom-0 w-px bg-white/[0.03] pointer-events-none"
+                    className="absolute top-0 bottom-0 w-px bg-white/[0.06] pointer-events-none"
                     style={{ left: `${toPercent(date)}%` }}
                   />
                 ))}
@@ -440,8 +452,8 @@ export default function Timeline() {
           ))}
 
           {/* Footer: today marker */}
-          <div className="flex border-t border-white/5 rounded-b-2xl overflow-hidden">
-            <div className="flex-shrink-0 w-36 sm:w-44 border-r border-white/5 px-4 py-2" />
+          <div className="flex border-t border-hairline rounded-b-2xl overflow-hidden">
+            <div className="flex-shrink-0 w-36 sm:w-44 border-r border-hairline px-4 py-2" />
             <div className="flex-1 relative py-2 px-2">
               {(() => {
                 const today = new Date()

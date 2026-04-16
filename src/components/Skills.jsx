@@ -161,7 +161,7 @@ export default function Skills() {
               whileHover={{ y: -3 }}
               // hoverBorder gives each card its own accent colour on hover,
               // consistent with the card's pip colour
-              className={`p-6 rounded-2xl border bg-gradient-to-br transition-all duration-300
+              className={`p-6 rounded-2xl border bg-[#14142a] bg-gradient-to-br transition-all duration-300
                          hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)]
                          ${group.color} ${group.border} ${group.hoverBorder}`}
             >

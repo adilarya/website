@@ -88,7 +88,7 @@ export default function Projects() {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.1 }}
               whileHover={{ y: -4, scale: 1.015 }}
-              className={`relative flex flex-col p-5 rounded-xl border bg-gradient-to-br
+              className={`relative flex flex-col p-5 rounded-xl border bg-[#14142a] bg-gradient-to-br
                          cursor-default transition-all duration-250
                          ${project.color} ${project.border}
                          ${project.hoverBorder} ${project.hoverShadow}`}
