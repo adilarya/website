@@ -43,7 +43,7 @@ export default function Footer() {
               {[
                 { href: 'https://github.com/adilarya', icon: Github },
                 { href: 'https://www.linkedin.com/in/adilarya/', icon: Linkedin },
-                { href: 'mailto:adil.arya.biz@gmail.com', icon: Mail },
+                { href: 'mailto:mr.adil.arya@gmail.com', icon: Mail },
               ].map(({ href, icon: Icon }) => (
                 <motion.a
                   key={href}

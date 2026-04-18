@@ -87,7 +87,7 @@ export default function Navbar() {
           {/* CTA + mobile toggle */}
           <div className="flex items-center gap-3">
             <motion.a
-              href="mailto:adil.arya.biz@gmail.com"
+              href="mailto:mr.adil.arya@gmail.com"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="btn-base btn-primary hidden md:inline-flex items-center justify-center px-4 py-2 text-sm whitespace-nowrap"
@@ -128,7 +128,7 @@ export default function Navbar() {
                 </a>
               ))}
               <a
-                href="mailto:adil.arya.biz@gmail.com"
+                href="mailto:mr.adil.arya@gmail.com"
                 className="btn-base btn-primary mt-2 inline-flex items-center justify-center px-4 py-3 text-sm"
               >
                 Get in touch

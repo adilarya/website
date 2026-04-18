@@ -235,10 +235,10 @@ export default function Hero() {
               </motion.a>
               <span className="text-gray-700">·</span>
               <a
-                href="mailto:adil.arya.biz@gmail.com"
+                href="mailto:mr.adil.arya@gmail.com"
                 className="text-sm transition-colors duration-200 text-gray-500 hover:text-gray-200"
               >
-                adil.arya.biz@gmail.com
+                mr.adil.arya@gmail.com
               </a>
             </motion.div>
           </div>

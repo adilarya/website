@@ -6,8 +6,8 @@ const LINKS = [
   {
     icon: Mail,
     label: 'Email',
-    value: 'adil.arya.biz@gmail.com',
-    href: 'mailto:adil.arya.biz@gmail.com',
+    value: 'mr.adil.arya@gmail.com',
+    href: 'mailto:mr.adil.arya@gmail.com',
     color: 'text-indigo-400',
     bg: 'bg-indigo-500/10',
     border: 'border-indigo-500/20',
@@ -78,7 +78,7 @@ export default function Contact() {
             </p>
 
             <motion.a
-              href="mailto:adil.arya.biz@gmail.com"
+              href="mailto:mr.adil.arya@gmail.com"
               whileHover={{ scale: 1.03, boxShadow: '0 0 40px rgba(129,140,248,0.4)' }}
               whileTap={{ scale: 0.97 }}
               className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 text-white text-sm font-semibold shadow-lg shadow-indigo-500/25 transition-all duration-200"
