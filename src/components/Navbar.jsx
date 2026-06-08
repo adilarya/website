@@ -5,10 +5,9 @@ import { Menu, X } from 'lucide-react'
 import ContactModal from './ContactModal'
 
 const navLinks = [
-  { label: 'Experience',          to: '/experience' },
   { label: 'Projects & Research', to: '/projects' },
+  { label: 'Experience',          to: '/experience' },
   { label: 'Education',           to: '/education' },
-  { label: 'Who I am',            to: '/about' },
 ]
 
 // Warm the Three.js chunk when the user hovers/focuses the Experience link, so

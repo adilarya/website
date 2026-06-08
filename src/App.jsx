@@ -6,7 +6,6 @@ import Hero from './components/Hero'
 import Experience from './components/Experience'
 import Projects from './components/Projects'
 import Education from './components/Education'
-import WhoIAm from './components/WhoIAm'
 import HackerHall from './components/HackerHall'
 
 // Jump to top whenever the route changes (so each "page" starts at the top).
@@ -35,7 +34,6 @@ function App() {
             <Route path="/experience" element={<Experience />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/education" element={<Education />} />
-            <Route path="/about" element={<WhoIAm />} />
             <Route path="/terminal" element={<HackerHall />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
