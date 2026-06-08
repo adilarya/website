@@ -1,103 +1,82 @@
 import { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
+import ContactModal from './ContactModal'
 
 const navLinks = [
-  { label: 'Timeline',     href: '#timeline' },
-  { label: 'About',        href: '#about' },
-  { label: 'Experience',   href: '#experience' },
-  { label: 'Skills',       href: '#skills' },
-  { label: 'Achievements', href: '#achievements' },
-  { label: 'Contact',      href: '#contact' },
+  { label: 'Experience',          to: '/experience' },
+  { label: 'Projects & Research', to: '/projects' },
+  { label: 'Education',           to: '/education' },
+  { label: 'Who I am',            to: '/about' },
 ]
 
-export default function Navbar() {
-  const [scrolled,      setScrolled]      = useState(false)
-  const [menuOpen,      setMenuOpen]      = useState(false)
-  const [activeSection, setActiveSection] = useState('')
+// Warm the Three.js chunk when the user hovers/focuses the Experience link, so
+// the 3D logos are usually ready by the time the page mounts.
+const prefetchLogo3D = () => { import('./Logo3D') }
 
-  // Sticky shadow on scroll
+export default function Navbar() {
+  const [scrolled, setScrolled]       = useState(false)
+  const [menuOpen, setMenuOpen]       = useState(false)
+  const [contactOpen, setContactOpen] = useState(false)
+  const { pathname } = useLocation()
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Highlight active nav link via IntersectionObserver
-  useEffect(() => {
-    const ids = navLinks.map(l => l.href.replace('#', ''))
-    const observer = new IntersectionObserver(
-      entries => entries.forEach(e => { if (e.isIntersecting) setActiveSection(e.target.id) }),
-      { threshold: 0.3 },
-    )
-    ids.forEach(id => {
-      const el = document.getElementById(id)
-      if (el) observer.observe(el)
-    })
-    return () => observer.disconnect()
-  }, [])
+  // Close the mobile menu whenever the route changes.
+  useEffect(() => { setMenuOpen(false) }, [pathname])
 
   return (
     <>
       <motion.nav
-        initial={{ y: -80, opacity: 0 }}
+        initial={{ y: -60, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? 'bg-[#0a0a12] supports-[backdrop-filter]:bg-[#09090f]/85 supports-[backdrop-filter]:backdrop-blur-xl border-b border-white/10'
+        data-fixed-bar
+        className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
+          scrolled || pathname !== '/'
+            ? 'border-b border-line supports-[backdrop-filter]:bg-white/80 supports-[backdrop-filter]:backdrop-blur-md bg-white'
             : 'bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          {/* Logo */}
-          <motion.a href="#" className="flex items-center gap-2 flex-shrink-0" whileHover={{ scale: 1.02 }}>
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
-              AA
-            </div>
-            <span className="font-semibold text-sm tracking-tight text-gray-200 whitespace-nowrap">
-              Adil Arya
-            </span>
-          </motion.a>
+        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link to="/" className="flex items-baseline gap-2 flex-shrink-0">
+            <span className="font-serif text-lg font-medium tracking-tight text-ink">Adil Arya</span>
+          </Link>
 
-          {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-1">
-            {navLinks.map(link => (
-              <a
-                key={link.href}
-                href={link.href}
-                className={`relative px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap ${
-                  activeSection === link.href.replace('#', '')
-                    ? 'text-indigo-400'
-                    : 'text-gray-400 hover:text-gray-200'
-                }`}
-              >
-                {activeSection === link.href.replace('#', '') && (
-                  <motion.span
-                    layoutId="nav-pill"
-                    className="absolute inset-0 rounded-md bg-indigo-500/10"
-                    transition={{ type: 'spring', bounce: 0.2, duration: 0.4 }}
-                  />
-                )}
-                <span className="relative z-10">{link.label}</span>
-              </a>
-            ))}
+          <div className="hidden md:flex items-center gap-7">
+            {navLinks.map(link => {
+              const isActive = pathname === link.to
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  onMouseEnter={link.to === '/experience' || link.to === '/education' ? prefetchLogo3D : undefined}
+                  onFocus={link.to === '/experience' || link.to === '/education' ? prefetchLogo3D : undefined}
+                  className={`link-underline pb-0.5 text-sm transition-colors duration-200 whitespace-nowrap ${
+                    isActive ? 'text-ink link-underline-active' : 'text-ink-soft hover:text-ink'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
           </div>
 
-          {/* CTA + mobile toggle */}
           <div className="flex items-center gap-3">
-            <motion.a
-              href="mailto:mr.adil.arya@gmail.com"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="btn-base btn-primary hidden md:inline-flex items-center justify-center px-4 py-2 text-sm whitespace-nowrap"
+            <button
+              onClick={() => setContactOpen(true)}
+              className="btn-base btn-primary hidden md:inline-flex px-4 py-2 text-sm whitespace-nowrap"
             >
               Get in touch
-            </motion.a>
-
+            </button>
             <button
               onClick={() => setMenuOpen(prev => !prev)}
-              className="btn-ghost md:hidden p-2 rounded-lg"
+              className="md:hidden p-2 rounded-lg text-ink hover:bg-ink/5 transition-colors"
               aria-label="Toggle menu"
             >
               {menuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -106,37 +85,37 @@ export default function Navbar() {
         </div>
       </motion.nav>
 
-      {/* Mobile menu — rendered below the fixed nav bar */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.2 }}
-            className="fixed top-16 left-0 right-0 z-40 p-4 bg-[#12121e] border-b border-white/10"
+            className="fixed top-16 left-0 right-0 z-40 p-4 bg-white border-b border-line md:hidden"
           >
             <div className="flex flex-col gap-1">
               {navLinks.map(link => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="inline-flex items-center px-4 py-3 rounded-lg text-sm font-medium text-gray-300 hover:bg-[#1f1f2a] hover:text-white transition-colors"
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className="px-4 py-3 rounded-lg text-sm text-ink-soft hover:bg-ink/5 hover:text-ink transition-colors"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
-              <a
-                href="mailto:mr.adil.arya@gmail.com"
-                className="btn-base btn-primary mt-2 inline-flex items-center justify-center px-4 py-3 text-sm"
+              <button
+                onClick={() => { setMenuOpen(false); setContactOpen(true) }}
+                className="btn-base btn-primary mt-2 justify-center px-4 py-3 text-sm"
               >
                 Get in touch
-              </a>
+              </button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
     </>
   )
 }

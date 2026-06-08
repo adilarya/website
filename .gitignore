@@ -1,1 +1,16 @@
+# dependencies
 node_modules
+
+# build output (Vercel rebuilds from source)
+dist
+
+# local tooling / editor
+.claude/
+.cursor/
+.rocketride/
+.vercel
+.DS_Store
+
+# logs
+*.log
+npm-debug.log*

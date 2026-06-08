@@ -4,57 +4,45 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+        sans:  ['Geist', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+        serif: ['Fraunces', 'Georgia', 'Cambria', 'serif'],
+        mono:  ['"Geist Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       colors: {
-        brand: {
-          indigo: '#818cf8',
-          cyan: '#22d3ee',
-          violet: '#a78bfa',
+        // Pure-white, monochrome editorial. No color accent — ink only.
+        paper: {
+          DEFAULT: '#ffffff', // base background
+          raised:  '#ffffff', // cards (separated by hairlines / soft shadow)
+          sunk:    '#f6f6f5', // faint neutral band for the rare alternating section
         },
-        surface: {
-          DEFAULT: '#12121e',
-          elevated: '#1a1a2e',
-          card: '#16162a',
+        ink: {
+          DEFAULT: '#141414', // primary text — near-black
+          soft:    '#4a4a4a', // secondary text
+          muted:   '#8a8a8a', // metadata / captions
         },
+        // "accent" kept as a token so existing utilities resolve — but it's ink.
+        accent: {
+          DEFAULT: '#141414',
+          soft:    '#3a3a3a',
+        },
+        line: 'rgba(20, 20, 20, 0.12)',
       },
-      backgroundImage: {
-        'gradient-brand': 'linear-gradient(135deg, #818cf8 0%, #22d3ee 100%)',
-        'gradient-brand-soft': 'linear-gradient(135deg, rgba(129,140,248,0.15) 0%, rgba(34,211,238,0.15) 100%)',
+      maxWidth: {
+        measure: '38rem',
       },
       animation: {
-        'float': 'float 6s ease-in-out infinite',
-        'glow-pulse': 'glow-pulse 3s ease-in-out infinite',
-        'slide-up': 'slide-up 0.6s ease-out',
-        'fade-in': 'fade-in 0.8s ease-out',
+        'fade-in': 'fade-in 0.7s ease-out both',
+        'rise':    'rise 0.7s cubic-bezier(0.25,0.46,0.45,0.94) both',
       },
       keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-12px)' },
+        'fade-in': { from: { opacity: '0' }, to: { opacity: '1' } },
+        rise: {
+          from: { opacity: '0', transform: 'translateY(16px)' },
+          to:   { opacity: '1', transform: 'translateY(0)' },
         },
-        'glow-pulse': {
-          '0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
-          '50%': { opacity: '1', transform: 'scale(1.02)' },
-        },
-        'slide-up': {
-          from: { opacity: '0', transform: 'translateY(30px)' },
-          to: { opacity: '1', transform: 'translateY(0)' },
-        },
-        'fade-in': {
-          from: { opacity: '0' },
-          to: { opacity: '1' },
-        },
-      },
-      boxShadow: {
-        'glow-indigo': '0 0 30px rgba(129, 140, 248, 0.3)',
-        'glow-cyan': '0 0 30px rgba(34, 211, 238, 0.3)',
-        'glow-lg': '0 0 60px rgba(129, 140, 248, 0.2)',
       },
     },
   },
