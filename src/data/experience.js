@@ -2,22 +2,6 @@
 // Descriptions sourced from public/resume.pdf. Add new roles here.
 export const EXPERIENCE = [
   {
-    slug: 'grit-financial',
-    company: 'Grit Financial Inc.',
-    role: 'Software Engineer Intern',
-    period: 'Feb 2026 – Present',
-    type: 'Fintech',
-    location: 'Remote',
-    logo: '/logos/grit.jpg',
-    logo3d: 'grit',
-    initials: 'GF',
-    current: true,
-    summary: 'Joined the core engineering team building Grit’s fintech platform.',
-    bullets: [
-      'Ramping on the production codebase and contributing to ongoing feature development across the platform.',
-    ],
-  },
-  {
     slug: 'divertica',
     company: 'Divertica Inc.',
     role: 'Computer Vision Intern',
