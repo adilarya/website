@@ -55,4 +55,15 @@ export const HACKATHONS = [
     description:
       'A runtime policy-enforcement layer that intercepts an LLM agent’s tool calls before they execute — allow, block, rewrite, or escalate — with full audit logging, sitting at the TrueFoundry MCP Gateway as the single egress point for downstream tools (Slack, Stripe). Next.js + TypeScript, shown with simulated scenarios and replay testing.',
   },
+  {
+    slug: 'baymax',
+    name: 'Baymax',
+    hackathon: 'CalHacks',
+    award: 'none',
+    logo3d: 'baymax',
+    awardLabel: null,
+    github: 'https://github.com/AdvaitaG/Calhacks',
+    description:
+      'A humanoid guide robot that safely walks a blindfolded person through the world — perceiving hazards, planning a path, and steering with gentle hand signals. A biologically-inspired multi-agent “nervous system” maps eight concurrent agents (vision, threat, spine, safety…) to brain regions, running a slow cortical planning path alongside a fast reflex path that bypasses deliberation for emergencies. Python on the Band multi-agent framework with LangGraph, Gemini 2.5 Flash, and LiveKit + OpenCV perception, driving a Booster T1 humanoid in Webots.',
+  },
 ]

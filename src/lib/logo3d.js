@@ -295,6 +295,47 @@ function buildAgentFirewall() {
   return centerGeos(geos)
 }
 
+// ── Baymax: the face as line art — extrude the black marks, leave white empty ─
+// (Outline ring + two eyes + connecting bar are the solids; the disk is hollow.)
+function buildBaymax() {
+  const settings = {
+    depth: 48, bevelEnabled: true,
+    bevelThickness: 4, bevelSize: 3, bevelSegments: 4, curveSegments: 64,
+  }
+  const geos = []
+
+  // Outline ring — the black stroke (width 15) of SVG ellipse cx220 cy180 rx178 ry142.
+  const ring = new THREE.Shape()
+  ring.absellipse(220, 180, 185.5, 149.5, 0, Math.PI * 2, false, 0)
+  const inner = new THREE.Path()
+  inner.absellipse(220, 180, 170.5, 134.5, 0, Math.PI * 2, true, 0)
+  ring.holes.push(inner)
+  geos.push(new THREE.ExtrudeGeometry(ring, settings))
+
+  // Connecting bar (SVG rect x150..290, y173..187, r7) — solid rounded rect.
+  const x0 = 150, x1 = 290, y0 = 173, y1 = 187, r = 7
+  const bar = new THREE.Shape()
+  bar.moveTo(x0 + r, y0)
+  bar.lineTo(x1 - r, y0)
+  bar.quadraticCurveTo(x1, y0, x1, y0 + r)
+  bar.lineTo(x1, y1 - r)
+  bar.quadraticCurveTo(x1, y1, x1 - r, y1)
+  bar.lineTo(x0 + r, y1)
+  bar.quadraticCurveTo(x0, y1, x0, y1 - r)
+  bar.lineTo(x0, y0 + r)
+  bar.quadraticCurveTo(x0, y0, x0 + r, y0)
+  geos.push(new THREE.ExtrudeGeometry(bar, settings))
+
+  // Two eyes (SVG ellipses cx150/290, cy180, rx34 ry36) — solid.
+  for (const ex of [150, 290]) {
+    const eye = new THREE.Shape()
+    eye.absellipse(ex, 180, 34, 36, 0, Math.PI * 2, false, 0)
+    geos.push(new THREE.ExtrudeGeometry(eye, settings))
+  }
+
+  return centerGeos(geos)
+}
+
 // Center a set of geometries on the origin; return measurements for framing.
 function centerGeos(geos) {
   const box = new THREE.Box3()
@@ -317,6 +358,7 @@ const LOGOS = {
   trialfind: { build: buildTrialFind, fill: 1.1,  frame: 'box',    flipX: true,  startY: -0.3, autoSpeed: 0.007, color: 0xf0c24a },
   physicalide: { build: buildPhysicalIDE, fill: 1.1, frame: 'box', flipX: true,  startY: -0.3, autoSpeed: 0.007, color: 0xf0c24a },
   agentfirewall: { build: buildAgentFirewall, fill: 1.1, frame: 'box', flipX: true, startY: -0.3, autoSpeed: 0.007, color: 0xf4f4f4 },
+  baymax:    { build: buildBaymax,    fill: 1.12, frame: 'box',    flipX: true,  startY: -0.3, autoSpeed: 0.007, color: 0xf4f4f4 },
 }
 
 const builtCache = {}

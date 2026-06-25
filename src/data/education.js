@@ -6,7 +6,7 @@ export const EDUCATION = [
     school: 'Columbia University',
     degree: 'MS in Artificial Intelligence, Concentration in Robotics & Perception',
     concentration: null,
-    period: 'Sep 2026 – Dec 2027',
+    period: 'Sep 2026 – Dec 2028',
     status: 'Incoming',
     location: 'New York, NY',
     logo: '/logos/columbia.jpg',
